@@ -104,6 +104,29 @@ class LogStreamLineParsersyslog23 extends LogStreamLineParser {
 			// Add Message Text
 			$arrArguments[SYSLOG_MESSAGE] .= $out[9];
 		}
+                // Riftware Syslog format
+                 else if ( preg_match("/<([0-9]{1,3})>([0-9]) ([0-9]{4,4}-[0-9]{1,2}-[0-9]{1,2}T[0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}\.[0-9]{1,3}(?:.|..)) (.*?) (.*?) (.*?) (.*?) (.*?) (.*?) (.*?) (.*?) (.*?) (.*?) (.*?)$/", $szLine, $out ) )
+                {
+                         // Copy parsed properties!
+                         $arrArguments[SYSLOG_FACILITY] = $out[1] >> 3;
+                         $arrArguments[SYSLOG_SEVERITY] = $out[1] & 0x0007;
+                         $arrArguments[SYSLOG_DATE] = GetEventTime($out[3]);
+                         $arrArguments[SYSLOG_HOST] = $out[4];
+                         $arrArguments[SYSLOG_SYSLOGTAG] = $out[5];
+                         $arrArguments[SYSLOG_PROCESSID] = $out[6];
+                         $arrArguments[SYSLOG_EVENT_ID] = $out[13];
+                        $arrArguments[SYSLOG_EVENT_SOURCE] = $out[10];
+                         $arrArguments[SYSLOG_EVENT_CATEGORY] = $out[11];
+                         $arrArguments[SYSLOG_EVENT_LOGTYPE] = $out[12];
+                         $arrArguments[SYSLOG_EVENT_USER] = $out[9];
+
+                         // Init MessageField
+                         $arrArguments[SYSLOG_MESSAGE] = "";
+                         if ( $out[8] != "-" ) // Add structured data if useful
+                                 $arrArguments[SYSLOG_MESSAGE] .= "!!!!" . $out[8];
+                        // Add Message Text
+                         $arrArguments[SYSLOG_MESSAGE] .= $out[14];
+                }
 		// Sample: <166>1 2012-02-17T08:29:27.420Z hostname.domain Vpxa - - -  [8B230C32 verbose 'Default' opID=SWI-378c32b1-2] [VpxaVmomi] SetStatusDone was called with syncGenNo (262)
 		else if ( preg_match("/<([0-9]{1,3})>([0-9]) ([0-9]{4,4}-[0-9]{1,2}-[0-9]{1,2}T[0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}\.[0-9]{1,3}(?:.|..)) (.*?) (.*?) (.*?) (.*?) (.*?) (.*?)$/", $szLine, $out ) )
 		{

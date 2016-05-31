@@ -545,6 +545,13 @@ function InitViewConfigs()
 									'userid' =>		null, 
 									'groupid' =>	null, 
 								   );
+       $CFG['Views']['RIFTLOG']= array(
+                                                                       'ID' =>                 "RIFTLOG",
+                                                                       'DisplayName' =>"RiftLog Fields",
+                                                                       'Columns' =>    array ( SYSLOG_SYSLOGTAG, SYSLOG_DATE, SYSLOG_HOST, SYSLOG_SEVERITY, SYSLOG_EVENT_USER, SYSLOG_PROCESSID, SYSLOG_EVENT_CATEGORY, SYSLOG_EVENT_ID, SYSLOG_EVENT_LOGTYPE, SYSLOG_EVENT_SOURCE, SYSLOG_MESSAGE ),
+                                                                       'userid' =>             null,
+                                                                       'groupid' =>    null,
+                                                                  );
 	
 	// Set default of 'DefaultViewsID' only if not set already!
 	if ( !isset($CFG['DefaultViewsID']) ) 
